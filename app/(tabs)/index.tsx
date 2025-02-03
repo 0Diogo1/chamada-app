@@ -1,74 +1,97 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
+import { ImageBackground, Pressable, SafeAreaView, StyleSheet, View } from 'react-native';
+import { Card, Provider as PaperProvider } from 'react-native-paper';
+import EmailInput from '@/components/Inputs/emailInput';
+import { greenTheme} from '../../components/Theme/theme';
+import PasswordInput from '@/components/Inputs/passwordInput';
+import { Text } from 'react-native-paper';
+import SubmitButton from '@/components/Buttons/SubmitButton';
+import { useState } from 'react';
+import { auth } from '@/src/firebase.config';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+const backGoundImage = require('../../assets/images/cupulaTeatro.jpg')
 
-export default function HomeScreen() {
+
+export default function App() {
+  const [userEmail, setUserEmail] = useState('');
+  const [userPass, setUserPass] = useState('');
+
+  const userLogin = () => {
+    signInWithEmailAndPassword(auth, userEmail, userPass)
+    .then((userCredential) => {
+      const user = userCredential.user;
+      alert('login efetuado')
+      console.log(user)
+    }).catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      alert(errorMessage)
+    })
+  }
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12'
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+    <PaperProvider theme={greenTheme}>
+      <ImageBackground
+        source={backGoundImage}
+        style={styles.background}
+        resizeMode="cover"
+      >
+        <View style={styles.overlay}>
+          <SafeAreaView style={styles.safeArea}>
+            <View style={styles.centerContainer}>
+              <Card>
+                <Card.Content>
+                  <Text variant="headlineMedium" style ={styles.margin16}>Login</Text>
+                  <EmailInput userEmail={userEmail} setEmail={setUserEmail} />
+                  <PasswordInput userPass={userPass} setUserPass={setUserPass}/>
+                  <SubmitButton startLogin={userLogin}/>
+                  <View style={styles.boxLink}>  
+                    <Pressable>
+                      <Text style={styles.textColor}>esqueci minha senha</Text>
+                    </Pressable>
+                    <Pressable>
+                      <Text style={styles.textColor}>novo usuário</Text>
+                    </Pressable>
+                  </View>
+                </Card.Content>
+              </Card>
+            </View>
+          </SafeAreaView>
+        </View>
+      </ImageBackground>
+
+    </PaperProvider>
+
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
+  background: {
+    flex: 1, // Faz a imagem de fundo cobrir toda a tela
+    padding:0
+  },
+  overlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.1)', // Overlay escuro com 50% de transparência
+  },
+  safeArea: {
+    flex: 1, // Ocupa toda a tela
+  },
+  centerContainer: {
+    flex: 1,
+    justifyContent: 'center', // Centraliza verticalmente
+    paddingHorizontal: 30, // Espaçamento horizontal
+  },
+  margin16: {
+    marginBottom: 16, // Margem abaixo do texto "Login"
+  },
+  boxLink: {
     flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
+    justifyContent: 'space-between',
+    marginTop: 16,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
+  textColor: {
+    color:'purple'
+  }
 });
