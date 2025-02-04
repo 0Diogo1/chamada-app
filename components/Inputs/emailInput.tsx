@@ -6,16 +6,18 @@ import { StyleSheet } from 'react-native';
 interface EmailInputProps {
   userEmail:string;
   setEmail:(email:string) => void;
+  label:string;
 }
 
-const EmailInput:React.FC<EmailInputProps> = ({userEmail, setEmail}) => {
+const EmailInput:React.FC<EmailInputProps> = ({userEmail, setEmail, label}) => {
   const [text, setText] = React.useState("");
 
   return (
     <TextInput
       style={styles.inputSpacing}
-      label="Email"
+      label={label}
       value={userEmail}
+      autoComplete='email'
       onChangeText={setEmail}
     />
   );

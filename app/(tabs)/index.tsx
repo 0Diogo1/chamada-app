@@ -1,14 +1,17 @@
-import { StatusBar } from 'expo-status-bar';
-import { ImageBackground, Pressable, SafeAreaView, StyleSheet, View } from 'react-native';
+import { ImageBackground, Pressable, SafeAreaView, View } from 'react-native';
 import { Card, Provider as PaperProvider } from 'react-native-paper';
 import EmailInput from '@/components/Inputs/emailInput';
-import { greenTheme} from '../../components/Theme/theme';
 import PasswordInput from '@/components/Inputs/passwordInput';
 import { Text } from 'react-native-paper';
 import SubmitButton from '@/components/Buttons/SubmitButton';
 import { useState } from 'react';
-import { auth } from '@/src/firebase.config';
+import { Auth } from 'firebase/auth';
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '@/src/firebase.config';
+import { greenTheme } from '@/components/Theme/theme';
+import { Link, useRouter } from 'expo-router';
+import Loader from '@/components/Loader/loader';
+import { styles } from './styles';
 
 const backGoundImage = require('../../assets/images/cupulaTeatro.jpg')
 
@@ -16,21 +19,28 @@ const backGoundImage = require('../../assets/images/cupulaTeatro.jpg')
 export default function App() {
   const [userEmail, setUserEmail] = useState('');
   const [userPass, setUserPass] = useState('');
+  const router = useRouter();
+  const [loading, setLoading] = useState(false)
 
   const userLogin = () => {
+    setLoading(true)
     signInWithEmailAndPassword(auth, userEmail, userPass)
-    .then((userCredential) => {
-      const user = userCredential.user;
-      alert('login efetuado')
-      console.log(user)
-    }).catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      alert(errorMessage)
-    })
+      .then((userCredential) => {
+        const user = userCredential.user;
+        if (user) {
+          router.replace('/home')
+        }
+      }).catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        alert(errorMessage)
+      }).finally(() => {
+        setLoading(false)
+      })
   }
 
   return (
+
     <PaperProvider theme={greenTheme}>
       <ImageBackground
         source={backGoundImage}
@@ -42,16 +52,16 @@ export default function App() {
             <View style={styles.centerContainer}>
               <Card>
                 <Card.Content>
-                  <Text variant="headlineMedium" style ={styles.margin16}>Login</Text>
-                  <EmailInput userEmail={userEmail} setEmail={setUserEmail} />
-                  <PasswordInput userPass={userPass} setUserPass={setUserPass}/>
-                  <SubmitButton startLogin={userLogin}/>
-                  <View style={styles.boxLink}>  
+                  <Text variant="headlineMedium" style={styles.margin16}>Login</Text>
+                  <EmailInput userEmail={userEmail} setEmail={setUserEmail} label={'Email'} />
+                  <PasswordInput userPass={userPass} setUserPass={setUserPass} label={'Senha'}/>
+                  {loading ? <Loader /> : <SubmitButton action={userLogin} text={'Entrar'} />}
+                  <View style={styles.boxLink}>
                     <Pressable>
                       <Text style={styles.textColor}>esqueci minha senha</Text>
                     </Pressable>
                     <Pressable>
-                      <Text style={styles.textColor}>novo usuário</Text>
+                      <Link href='/newUser' style={styles.textColor}>novo usuário</Link>
                     </Pressable>
                   </View>
                 </Card.Content>
@@ -66,32 +76,3 @@ export default function App() {
   );
 }
 
-const styles = StyleSheet.create({
-  background: {
-    flex: 1, // Faz a imagem de fundo cobrir toda a tela
-    padding:0
-  },
-  overlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.1)', // Overlay escuro com 50% de transparência
-  },
-  safeArea: {
-    flex: 1, // Ocupa toda a tela
-  },
-  centerContainer: {
-    flex: 1,
-    justifyContent: 'center', // Centraliza verticalmente
-    paddingHorizontal: 30, // Espaçamento horizontal
-  },
-  margin16: {
-    marginBottom: 16, // Margem abaixo do texto "Login"
-  },
-  boxLink: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 16,
-  },
-  textColor: {
-    color:'purple'
-  }
-});

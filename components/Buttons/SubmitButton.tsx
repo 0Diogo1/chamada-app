@@ -3,12 +3,13 @@ import { Button } from 'react-native-paper';
 import { StyleSheet } from 'react-native';
 
 interface SubmitButtonProps {
-  startLogin: () => void;
+  action: () => void;
+  text:string;
 }
 
-const SubmitButton:React.FC<SubmitButtonProps> = ({startLogin}) => (
-  <Button mode="contained" onPress={startLogin}>
-    Entrar
+const SubmitButton:React.FC<SubmitButtonProps> = ({action, text}) => (
+  <Button mode="contained" onPress={action}>
+    {text}
   </Button>
 );
 
