@@ -11,7 +11,7 @@ import { auth } from '@/src/firebase.config';
 import { greenTheme } from '@/components/Theme/theme';
 import { Link, useRouter } from 'expo-router';
 import Loader from '@/components/Loader/loader';
-import { styles } from './styles';
+import styles from './styles';
 
 const backGoundImage = require('../../assets/images/cupulaTeatro.jpg')
 

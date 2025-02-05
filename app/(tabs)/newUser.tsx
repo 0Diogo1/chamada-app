@@ -5,7 +5,7 @@ import { greenTheme } from "@/components/Theme/theme";
 import { useState } from "react";
 import { View, StyleSheet, ImageBackground } from "react-native";
 import { Button, Card, PaperProvider, Text } from 'react-native-paper';
-import { styles } from "./styles";
+import  styles  from "./styles";
 import adicionarDadosAdicionais from "@/src/db";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/src/firebase.config";

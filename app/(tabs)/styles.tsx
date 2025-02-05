@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 
 
-export const styles = StyleSheet.create({
+const styles = StyleSheet.create({
     background: {
         flex: 1, // Faz a imagem de fundo cobrir toda a tela
     },
@@ -32,5 +32,36 @@ export const styles = StyleSheet.create({
     },
     textColor: {
         color: 'purple'
-    }
+    },
+    textColorVariant1:{
+        color:'white'
+    },
+    cardContainer: {
+        display:'flex',
+        flexDirection:'column',
+        justifyContent:'center',
+        alignItems:'center'
+    },
+    buttonContainer: {
+        alignItems: 'center',
+        minWidth:140,
+
+    },
+    buttonText: {
+        marginTop: 8, // Espaço entre o ícone e o texto
+        fontSize: 16,
+        color: 'purple',
+    },
+    cardRow:{
+        flexDirection:'row',
+        flexWrap:'wrap',
+        gap:16,
+        justifyContent:'center',
+        marginBottom: 20
+    },
+    camera: {
+        flex: 0.5,
+    },
 });
+
+export default styles;
