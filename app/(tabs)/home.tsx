@@ -13,15 +13,16 @@ const Home = () => {
 
     const router = useRouter();
     const routeDefiner = () => {
-        router.replace('/screenScanner/screenScanner')
+        alert('Tela em desenvolvimento')
     }
+   
     return (
         <PaperProvider theme={greenTheme}>
             <ImageBackground source={backgroundImage} style={styles.background} >
                 <View style={styles.container}>
                     <View style={styles.cardRow}>
-                        <CardButton icon={"qrcode-scan"} route={routeDefiner} text={"Scanner"} />
-                        <CardButton icon={"human-child"} route={routeDefiner} text={"Alunos"} />
+                        <CardButton icon={"qrcode-scan"} route={() => router.push('/screenScanner/screenScanner')} text={"Scanner"} />
+                        <CardButton icon={"human-child"} route={() => router.push('/alunos/screenAlunos')} text={"Alunos"}/>
                         <CardButton icon={"office-building-marker"} route={routeDefiner} text={"Registro de Saídas"} />
                         <CardButton icon={"file-document-edit"} route={routeDefiner} text={"Relatório"} />
                         <CardButton icon={"google-classroom"} route={routeDefiner} text={"Sala de aula"} />

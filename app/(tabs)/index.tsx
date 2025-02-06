@@ -25,8 +25,15 @@ export default function App() {
   const userLogin = () => {
     setLoading(true)
     signInWithEmailAndPassword(auth, userEmail, userPass)
-      .then((userCredential) => {
+      .then(async (userCredential) => {
         const user = userCredential.user;
+        const token = await user.getIdToken()
+        let userStorage = {
+          token:token,
+          id:user.uid,
+          email:user.email
+        }
+        console.log(userStorage)
         if (user) {
           router.replace('/home')
         }
