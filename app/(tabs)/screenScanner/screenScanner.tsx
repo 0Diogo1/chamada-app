@@ -47,10 +47,15 @@ export default function App() {
       if (docSnap.exists()) {
         const alunoData = docSnap.data();
         const alunoId = docSnap.id;
+
         const alunocomId:Aluno = {
-            ...alunoData,
-            id:alunoId
+          id: alunoId,
+          nome: alunoData.nome,
+          turma: alunoData.turma,
+          horario: alunoData.horario
         }
+        setAluno(alunocomId)
+        console.log(alunocomId)
        
       } else {
         setError("Aluno não encontrado.");
