@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
 
     },
     buttonText: {
-        marginTop: 8, // Espaço entre o ícone e o texto
+        marginTop: 8, 
         fontSize: 16,
         color: 'purple',
     },
@@ -60,8 +60,38 @@ const styles = StyleSheet.create({
         marginBottom: 20
     },
     camera: {
-        flex: 0.5,
+        flex: 0.4,
+        width:300,
     },
+    message: {
+        textAlign: 'center',
+        paddingBottom: 10,
+      },
+      button: {
+        flex: 1,
+        alignSelf: 'flex-end',
+        alignItems: 'center',
+      },
+      text: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        color: 'white',
+      },
+      resultContainer: {
+        marginTop: 20,
+        alignItems: 'center',
+      },
+      resultText: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: 'white',
+      },
+      errorText: {
+        color: 'red',
+        fontSize: 16,
+        fontWeight: 'bold',
+        marginTop: 20,
+      },
 });
 
 export default styles;

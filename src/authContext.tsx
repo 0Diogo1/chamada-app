@@ -1,43 +1,58 @@
-// import { useState, useEffect, createContext, useContext } from "react";
-// import AsyncStorage from "@react-native-async-storage/async-storage";
-// import { useRouter } from "expo-router";
+import { useState, useEffect, createContext, useContext, ReactNode } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useRouter } from "expo-router";
+import { User } from "./type";
 
-// const AuthContext = createContext(null);
+interface AuthContextType {
+    user: User;
+    login: (userData: User) => Promise<void>;
+    logout: () => Promise<void>;
+}
 
-// export const AuthProvider = ({ children }) => {
-//   const [user, setUser] = useState(null);
-//   const router = useRouter();
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-//   useEffect(() => {
-//     const loadUser = async () => {
-//       const storedUser = await AsyncStorage.getItem("user");
-//       if (storedUser) {
-//         setUser(JSON.parse(storedUser));
-//       } else {
-//         router.replace("/"); // Redireciona para login se não houver usuário
-//       }
-//     };
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
+    const [user, setUser] = useState<User>({ id: '', email: '', token: '' });
+    const router = useRouter();
 
-//     loadUser();
-//   }, []);
+    useEffect(() => {
+        const loadUser = async () => {
+            const storedUser = await AsyncStorage.getItem("user");
+            if (storedUser) {
+                setUser(JSON.parse(storedUser));
+            } else {
+                router.replace("/"); // Redireciona para login se não houver usuário
+            }
+        };
 
-//   const login = async (userData) => {
-//     await AsyncStorage.setItem("user", JSON.stringify(userData));
-//     setUser(userData);
-//     router.replace("/home"); // Redireciona para Home após login
-//   };
+        loadUser();
+    }, []);
 
-//   const logout = async () => {
-//     await AsyncStorage.removeItem("user");
-//     setUser(null);
-//     router.replace("/"); // Redireciona para login após logout
-//   };
+    const login = async (userData: User) => {
+        await AsyncStorage.setItem("user", JSON.stringify(userData));
+        console.log(userData)
+        router.replace("/home"); // Redireciona para Home após login
+    };
 
-//   return (
-//     <AuthContext.Provider value={{ user, login, logout }}>
-//       {children}
-//     </AuthContext.Provider>
-//   );
-// };
+    const logout = async () => {
+        await AsyncStorage.removeItem("user");
+        setUser({ id: '', email: '', token: '' });
+        router.replace("/"); // Redireciona para login após logout
+    };
 
-// export const useAuth = () => useContext(AuthContext);
+    return (
+        <AuthContext.Provider value={{ user, login, logout }}>
+            {children}
+        </AuthContext.Provider>
+    );
+};
+
+export const useAuth = () => {
+    const context = useContext(AuthContext);
+
+
+    if(!context){
+        throw new Error('useAuth deve ser usado dentro de um AuthProvider')
+    }
+    return context
+}
