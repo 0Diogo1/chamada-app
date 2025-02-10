@@ -33,65 +33,88 @@ const styles = StyleSheet.create({
     textColor: {
         color: 'purple'
     },
-    textColorVariant1:{
-        color:'white'
+    textColorVariant1: {
+        color: 'white'
     },
     cardContainer: {
-        display:'flex',
-        flexDirection:'column',
-        justifyContent:'center',
-        alignItems:'center'
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     buttonContainer: {
         alignItems: 'center',
-        minWidth:140,
-
+        minWidth: 140,
     },
     buttonText: {
-        marginTop: 8, 
+        marginTop: 8,
         fontSize: 16,
         color: 'purple',
     },
-    cardRow:{
-        flexDirection:'row',
-        flexWrap:'wrap',
-        gap:16,
-        justifyContent:'center',
+    cardRow: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        gap: 16,
+        justifyContent: 'center',
         marginBottom: 20
     },
     camera: {
         flex: 0.4,
-        width:300,
+        width: 300,
     },
     message: {
         textAlign: 'center',
         paddingBottom: 10,
-      },
-      button: {
+    },
+    button: {
         flex: 1,
         alignSelf: 'flex-end',
         alignItems: 'center',
-      },
-      text: {
+    },
+    text: {
         fontSize: 24,
         fontWeight: 'bold',
         color: 'white',
-      },
-      resultContainer: {
+    },
+    textAluno: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        color: '#aaa',
+        borderWidth: 2,
+        padding: 7,
+        marginBottom: 5,
+        marginTop: 5,
+        borderRadius: 20,
+        borderColor: '#aaa'
+
+    },
+    resultContainer: {
         marginTop: 20,
         alignItems: 'center',
-      },
-      resultText: {
+    },
+    resultText: {
         fontSize: 18,
         fontWeight: 'bold',
         color: 'white',
-      },
-      errorText: {
+    },
+    errorText: {
         color: 'red',
         fontSize: 16,
         fontWeight: 'bold',
         marginTop: 20,
-      },
+    },
+    groupButtonInRow: {
+        display: 'flex',
+        flexDirection: 'row',
+        gap: 6,
+        marginTop: 10
+    },
+    groupTextForAluno:{
+        marginTop:20,
+        marginBottom:20,
+        alignItems:'center'
+    }
+    
 });
 
 export default styles;

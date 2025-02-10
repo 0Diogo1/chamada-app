@@ -1,7 +1,9 @@
 import { useState, useEffect, createContext, useContext, ReactNode } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
-import { User } from "./type";
+import { Colaborador, User } from "./type";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "./firebase.config";
 
 interface AuthContextType {
     user: User;
@@ -13,6 +15,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<User>({ id: '', email: '', token: '' });
+    const [colab, setColab] = useState<Colaborador>({nome:'',cargo:''})
     const router = useRouter();
 
     useEffect(() => {
@@ -30,7 +33,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     const login = async (userData: User) => {
         await AsyncStorage.setItem("user", JSON.stringify(userData));
-        console.log(userData)
+        getColab(userData.id)
         router.replace("/home"); // Redireciona para Home após login
     };
 
@@ -39,6 +42,25 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setUser({ id: '', email: '', token: '' });
         router.replace("/"); // Redireciona para login após logout
     };
+
+    const getColab = async (id:string) => {
+        try {
+              const docRef = doc(db, "usuarios", id);
+              const docSnap = await getDoc(docRef);
+              console.log(docSnap.data())
+        
+              if (docSnap.exists()) {
+                const usuariosData = docSnap.data();
+                console.log(usuariosData)
+
+              } else {
+                
+              }
+            } catch (err) {
+              console.log(err)
+            } finally {
+            }
+    }
 
     return (
         <AuthContext.Provider value={{ user, login, logout }}>

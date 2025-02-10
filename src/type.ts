@@ -9,3 +9,8 @@ export interface Aluno {
     turma:string;
     horario:string;
 }
+
+export interface Colaborador {
+    nome:string;
+    cargo:string;
+}

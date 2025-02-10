@@ -33,7 +33,7 @@ export default function App() {
         let userStorage = {
           token: token,
           id: user.uid,
-          email: user.email
+          email: user.email,
         }
 
         if (user) {

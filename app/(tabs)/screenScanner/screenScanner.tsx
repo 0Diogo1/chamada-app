@@ -1,12 +1,13 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Camera, CameraType, CameraView, useCameraPermissions } from 'expo-camera';
 import { doc, getDoc } from "firebase/firestore";
 import { db } from '@/src/firebase.config';
 import { ActivityIndicator } from 'react-native';
 import styles from '../styles';
-import { useDados } from '@/src/dadosContext';
+import { useData } from '@/src/DataProvider';
 import { Aluno } from '@/src/type';
+import { useRouter } from 'expo-router';
 
 // Caminho da imagem de fundo
 const backgroundImage = require('../../../assets/images/backgroundImage.jpg');
@@ -17,7 +18,8 @@ export default function App() {
   const [scannedData, setScannedData] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const {setAluno, aluno} = useDados()
+  const {setAluno, aluno} = useData()
+  const router = useRouter()
 
   if (!permission) {
     return <View />;
@@ -32,9 +34,7 @@ export default function App() {
     );
   }
 
-  const toggleCameraFacing = () => {
-    setFacing(current => (current === 'back' ? 'front' : 'back'));
-  };
+  
 
   const handleQrCodeScanned = async ({ data }: { data: string }) => {
     setLoading(true);
@@ -47,16 +47,16 @@ export default function App() {
       if (docSnap.exists()) {
         const alunoData = docSnap.data();
         const alunoId = docSnap.id;
-
-        const alunocomId:Aluno = {
+        
+        const alunocomId: Aluno = {
           id: alunoId,
           nome: alunoData.nome,
           turma: alunoData.turma,
           horario: alunoData.horario
         }
-        setAluno(alunocomId)
-        console.log(alunocomId)
-       
+
+        setAluno(alunocomId) 
+
       } else {
         setError("Aluno não encontrado.");
       }
@@ -64,8 +64,10 @@ export default function App() {
       setError("Erro ao consultar dados do aluno.");
     } finally {
       setLoading(false);
+      router.replace('/(tabs)/alunos/screenAlunos')
     }
   };
+  
 
   return (
     <ImageBackground source={backgroundImage} style={styles.container}>
@@ -80,7 +82,7 @@ export default function App() {
 
         {loading && <ActivityIndicator size="large" color="#0000ff" />}
         {error && <Text style={styles.errorText}>{error}</Text>}
-        {scannedData && (
+        {(scannedData && aluno) &&  (
           <View style={styles.resultContainer}>
             <Text style={styles.resultText}>Nome: {aluno.nome}</Text>
             <Text style={styles.resultText}>Turma: {aluno.turma}</Text>
